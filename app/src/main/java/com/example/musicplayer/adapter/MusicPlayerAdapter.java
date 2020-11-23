@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,12 +55,26 @@ public class MusicPlayerAdapter extends
 
     public class MusicPlayerViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageView mSongImage;
+        private TextView mSongName, mArtistName, mDuration;
+
         public MusicPlayerViewHolder(@NonNull View itemView) {
             super(itemView);
+            findViews(itemView);
+        }
+
+        private void findViews(@NonNull View itemView) {
+            mSongImage = itemView.findViewById(R.id.img_song);
+            mSongName = itemView.findViewById(R.id.txt_song_name);
+            mArtistName = itemView.findViewById(R.id.txt_artist_name);
+            mDuration = itemView.findViewById(R.id.txt_song_time);
         }
 
         private void bindSong(Song song) {
-
+            mArtistName.setText(song.getArtistName());
+            mSongName.setText(song.getSongName());
+            mSongImage.setImageBitmap(song.getSongImage());
+            mDuration.setText(song.getDuration());
         }
     }
 }

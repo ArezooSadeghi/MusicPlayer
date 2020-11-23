@@ -1,5 +1,11 @@
 package com.example.musicplayer.controller.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.MusicPlayerAdapter;
 import com.example.musicplayer.model.Song;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.musicplayer.repository.MusicPlayerRepository;
 
 public class SongFragment extends Fragment {
 
+    public static final String TAG = "SongFragment";
     private RecyclerView mSongRecyclerView;
+    private MusicPlayerRepository mRepository;
 
     public SongFragment() {
 
@@ -34,7 +40,8 @@ public class SongFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mRepository = MusicPlayerRepository.getInstance();
+        getSongInformation();
     }
 
     @Override
@@ -59,7 +66,44 @@ public class SongFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        List<Song> songList = new ArrayList<>();
-        mSongRecyclerView.setAdapter(new MusicPlayerAdapter(songList, getContext()));
+        mSongRecyclerView.setAdapter(new MusicPlayerAdapter(mRepository.getSongList(), getContext()));
+    }
+
+    private void getSongInformation() {
+
+        int[] songs = new int[]{R.raw.hello,
+                R.raw.someone_like_you,
+                R.raw.skyfall,
+                R.raw.rumour_has_it,
+                R.raw.rolling_in_the_deep,
+                R.raw.one_and_only,
+                R.raw.lovesong,
+                R.raw.dark,
+                R.raw.chasing_pavements,
+                R.raw.best_for_last};
+
+        MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+        for (int i = 0; i < songs.length; i++) {
+            String songName = getContext().getResources().getResourceName(songs[i]).substring(28);
+            Uri mediaPath = Uri.parse(
+                    "android.resource://" + getContext().getPackageName() + "/" + songs[i]);
+            metadataRetriever.setDataSource(getContext(), mediaPath);
+            long duration = Long.parseLong(
+                    metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+            String seconds = String.valueOf((duration % 60000) / 1000);
+            String minutes = String.valueOf(duration / 60000);
+            String songDuration = minutes + ":" + seconds;
+            byte[] artBytes =  metadataRetriever.getEmbeddedPicture();
+            Bitmap songImage = ((BitmapDrawable) getResources().getDrawable(R.drawable.thumbnail_art)).getBitmap();
+            if(artBytes!=null)
+            {
+                songImage = BitmapFactory.decodeByteArray(artBytes, 0, artBytes.length);
+            }
+            Song song = new Song(metadataRetriever
+                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST), metadataRetriever
+                    .extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+                    songName, songDuration, songImage);
+            mRepository.insertSong(song);
+        }
     }
 }

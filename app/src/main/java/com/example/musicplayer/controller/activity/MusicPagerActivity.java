@@ -25,8 +25,9 @@ public class MusicPagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicpager);
+
         findViews();
-        initViews();
+        setupAdapter();
 
     }
 
@@ -35,7 +36,7 @@ public class MusicPagerActivity extends AppCompatActivity {
         mTabLayout = findViewById(R.id.music_player_tab_layout);
     }
 
-    private void initViews() {
+    private void setupAdapter() {
         mMusicPager.setAdapter(new MusicPagerAdapter(this));
         TabLayoutMediator mediator = new TabLayoutMediator(
                 mTabLayout, mMusicPager,
