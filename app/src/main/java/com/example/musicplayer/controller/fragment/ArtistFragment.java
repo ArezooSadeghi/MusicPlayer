@@ -60,6 +60,12 @@ public class ArtistFragment extends Fragment {
 
     private void setupAdapter() {
         List<Song> artistList = new ArrayList<>();
-        mArtistRecyclerView.setAdapter(new MusicPlayerAdapter(artistList, getContext()));
+        mArtistRecyclerView.setAdapter(new MusicPlayerAdapter(artistList, getContext(),
+                new MusicPlayerAdapter.SendIntent() {
+            @Override
+            public void viewHolderClicked() {
+
+            }
+        }));
     }
 }

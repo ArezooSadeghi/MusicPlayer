@@ -1,9 +1,9 @@
 package com.example.musicplayer.controller.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapter.MusicPlayerAdapter;
+import com.example.musicplayer.controller.activity.ContainerActivity;
 import com.example.musicplayer.model.Song;
 import com.example.musicplayer.repository.MusicPlayerRepository;
+import com.example.musicplayer.service.MusicPlayerService;
 
 public class SongFragment extends Fragment {
 
@@ -66,7 +68,20 @@ public class SongFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        mSongRecyclerView.setAdapter(new MusicPlayerAdapter(mRepository.getSongList(), getContext()));
+        mSongRecyclerView.setAdapter(new MusicPlayerAdapter(mRepository.getSongList(),
+                getContext(),
+                new MusicPlayerAdapter.SendIntent() {
+            @Override
+            public void viewHolderClicked() {
+                Intent intent = ContainerActivity.newIntent(getContext());
+                startActivity(intent);
+
+            }}, new MusicPlayerAdapter.Play() {
+            @Override
+            public void playSong() {
+                getContext().startService(MusicPlayerService.newIntent(getContext()));
+            }
+        }));
     }
 
     private void getSongInformation() {

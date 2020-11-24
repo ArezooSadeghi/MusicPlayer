@@ -59,6 +59,12 @@ public class AlbumFragment extends Fragment {
 
     private void setupAdapter() {
         List<Song> albumList = new ArrayList<>();
-        mAlbumRecyclerView.setAdapter(new MusicPlayerAdapter(albumList, getContext()));
+        mAlbumRecyclerView.setAdapter(new MusicPlayerAdapter(albumList, getContext(),
+                new MusicPlayerAdapter.SendIntent() {
+            @Override
+            public void viewHolderClicked() {
+
+            }
+        }));
     }
 }

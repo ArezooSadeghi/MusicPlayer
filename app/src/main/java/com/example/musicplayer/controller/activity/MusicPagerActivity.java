@@ -1,5 +1,7 @@
 package com.example.musicplayer.controller.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -83,5 +85,9 @@ public class MusicPagerActivity extends AppCompatActivity {
         public int getItemCount() {
             return NUMBER_OF_PAGES;
         }
+    }
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MusicPagerActivity.class);
     }
 }

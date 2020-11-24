@@ -18,12 +18,22 @@ import java.util.List;
 public class MusicPlayerAdapter extends
         RecyclerView.Adapter<MusicPlayerAdapter.MusicPlayerViewHolder> {
 
+    private SendIntent mCallback;
+    private Play mPlay;
     private List<Song> mSongList;
     private Context mContext;
 
-    public MusicPlayerAdapter(List<Song> songList, Context context) {
+    public MusicPlayerAdapter(List<Song> songList, Context context, SendIntent callback) {
         mSongList = songList;
         mContext = context;
+        mCallback = callback;
+    }
+
+    public MusicPlayerAdapter(List<Song> songList, Context context, SendIntent callback, Play play) {
+        mSongList = songList;
+        mContext = context;
+        mCallback = callback;
+        mPlay = play;
     }
 
     public List<Song> getSongList() {
@@ -40,6 +50,13 @@ public class MusicPlayerAdapter extends
         View view = LayoutInflater
                 .from(mContext)
                 .inflate(R.layout.item_detail, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallback.viewHolderClicked();
+                mPlay.playSong();
+            }
+        });
         return new MusicPlayerViewHolder(view);
     }
 
@@ -76,5 +93,13 @@ public class MusicPlayerAdapter extends
             mSongImage.setImageBitmap(song.getSongImage());
             mDuration.setText(song.getDuration());
         }
+    }
+
+    public interface SendIntent {
+        void viewHolderClicked();
+    }
+
+    public interface Play {
+        void playSong();
     }
 }

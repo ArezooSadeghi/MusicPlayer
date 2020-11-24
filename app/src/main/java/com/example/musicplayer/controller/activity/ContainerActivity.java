@@ -1,5 +1,7 @@
 package com.example.musicplayer.controller.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,5 +27,9 @@ public class ContainerActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, PlaybackPageFragment.newInstance())
                     .commit();
         }
+    }
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, ContainerActivity.class);
     }
 }
