@@ -2,6 +2,7 @@ package com.example.musicplayer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.musicplayer.R;
 import com.example.musicplayer.controller.activity.ContainerActivity;
 import com.example.musicplayer.model.Song;
-import com.example.musicplayer.service.MusicPlayerService;
+import com.example.musicplayer.service.MyService;
 
 import java.util.List;
 
 public class MusicPlayerAdapter extends
         RecyclerView.Adapter<MusicPlayerAdapter.MusicPlayerViewHolder> {
+
+    public static final String EXTRA_SONG_ID = "songId";
 
     private List<Song> mSongList;
     private Context mContext;
@@ -76,21 +79,22 @@ public class MusicPlayerAdapter extends
                 public void onClick(View view) {
 
                     startActivity();
-
                     startService();
-
                 }
             });
         }
 
         private void startService() {
-            Intent serviceIntent = MusicPlayerService.newIntent(mContext, mSong.getSongId());
-            mContext.startService(serviceIntent);
+            Intent intent = MyService.newIntent(mContext);
+            intent.putExtra(EXTRA_SONG_ID, mSong.getSongId());
+            intent.setAction(MyService.ACTION_PLAY);
+            mContext.startService(intent);
         }
 
         private void startActivity() {
-            Intent activityIntent = ContainerActivity.newIntent(mContext, mSong.getSongId());
-            mContext.startActivity(activityIntent);
+            Intent intent = ContainerActivity.newIntent(mContext);
+            intent.putExtra(EXTRA_SONG_ID, mSong.getSongId());
+            mContext.startActivity(intent);
         }
 
         private void bindSong(Song song) {

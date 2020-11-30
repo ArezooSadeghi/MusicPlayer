@@ -9,20 +9,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.musicplayer.R;
+import com.example.musicplayer.adapter.MusicPlayerAdapter;
 import com.example.musicplayer.controller.fragment.PlaybackPageFragment;
 
 import java.util.UUID;
 
 public class ContainerActivity extends AppCompatActivity {
 
-    public static final String EXTRA_SONG_ID = "com.example.musicplayer.songId";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
-        UUID songId = (UUID) getIntent().getSerializableExtra(EXTRA_SONG_ID);
+        UUID songId = (UUID) getIntent().getSerializableExtra(MusicPlayerAdapter.EXTRA_SONG_ID);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
@@ -35,9 +34,7 @@ public class ContainerActivity extends AppCompatActivity {
         }
     }
 
-    public static Intent newIntent(Context context, UUID songId) {
-        Intent intent = new Intent(context, ContainerActivity.class);
-        intent.putExtra(EXTRA_SONG_ID, songId);
-        return intent;
+    public static Intent newIntent(Context context) {
+        return new Intent(context, ContainerActivity.class);
     }
 }

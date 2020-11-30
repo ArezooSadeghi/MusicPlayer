@@ -131,17 +131,40 @@
                     android:src="@drawable/ic_previous"
                     android:tint="@android:color/white" />
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btn_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:visibility="gone"
                     android:backgroundTint="@color/colorSilver"
                     android:elevation="2dp"
                     android:src="@drawable/ic_play"
                     android:tint="@android:color/white"
                     app:fabSize="normal"
                     app:rippleColor="@color/colorGray" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btn_pause"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:backgroundTint="@color/colorSilver"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_pause"
+                        android:tint="@android:color/white"
+                        app:fabSize="normal"
+                        app:rippleColor="@color/colorGray" />
+
+
+                </RelativeLayout>
 
                 <ImageButton
                     android:id="@+id/btn_next"

@@ -1,8 +1,10 @@
 package com.example.musicplayer;
 
 import android.app.Application;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.graphics.Color;
 import android.os.Build;
 
 public class MusicPlayerApplication extends Application {
@@ -18,16 +20,18 @@ public class MusicPlayerApplication extends Application {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            NotificationChannel channel = new NotificationChannel(
+            NotificationChannel notificationChannel = new NotificationChannel(
                     getResources().getString(R.string.notification_channel_id),
-                    getResources().getString(R.string.notification_channel_title),
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    getResources().getString(R.string.notification_channel_name),
+                    NotificationManager.IMPORTANCE_NONE);
 
-            channel.setDescription(
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationChannel.setDescription(
                     getResources().getString(R.string.notification_channel_description));
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            notificationManager.createNotificationChannel(notificationChannel);
         }
     }
 }
