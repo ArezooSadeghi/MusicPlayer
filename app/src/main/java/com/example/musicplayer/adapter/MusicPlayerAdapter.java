@@ -1,6 +1,7 @@
 package com.example.musicplayer.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,29 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.R;
+import com.example.musicplayer.controller.activity.ContainerActivity;
 import com.example.musicplayer.model.Song;
+import com.example.musicplayer.service.MusicPlayerService;
 
 import java.util.List;
 
 public class MusicPlayerAdapter extends
         RecyclerView.Adapter<MusicPlayerAdapter.MusicPlayerViewHolder> {
 
-    private SendIntent mCallback;
-    private Play mPlay;
     private List<Song> mSongList;
     private Context mContext;
 
-    public MusicPlayerAdapter(List<Song> songList, Context context, SendIntent callback) {
+    public MusicPlayerAdapter(List<Song> songList, Context context) {
         mSongList = songList;
         mContext = context;
-        mCallback = callback;
-    }
-
-    public MusicPlayerAdapter(List<Song> songList, Context context, SendIntent callback, Play play) {
-        mSongList = songList;
-        mContext = context;
-        mCallback = callback;
-        mPlay = play;
     }
 
     public List<Song> getSongList() {
@@ -47,16 +40,10 @@ public class MusicPlayerAdapter extends
     @NonNull
     @Override
     public MusicPlayerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(mContext)
-                .inflate(R.layout.item_detail, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCallback.viewHolderClicked();
-                mPlay.playSong();
-            }
-        });
+        View view = LayoutInflater.from(mContext).inflate(
+                R.layout.item_detail,
+                parent,
+                false);
         return new MusicPlayerViewHolder(view);
     }
 
@@ -74,32 +61,44 @@ public class MusicPlayerAdapter extends
 
         private ImageView mSongImage;
         private TextView mSongName, mArtistName, mDuration;
+        private Song mSong;
 
         public MusicPlayerViewHolder(@NonNull View itemView) {
             super(itemView);
-            findViews(itemView);
-        }
 
-        private void findViews(@NonNull View itemView) {
             mSongImage = itemView.findViewById(R.id.img_song);
             mSongName = itemView.findViewById(R.id.txt_song_name);
             mArtistName = itemView.findViewById(R.id.txt_artist_name);
             mDuration = itemView.findViewById(R.id.txt_song_time);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    startActivity();
+
+                    startService();
+
+                }
+            });
+        }
+
+        private void startService() {
+            Intent serviceIntent = MusicPlayerService.newIntent(mContext, mSong.getSongId());
+            mContext.startService(serviceIntent);
+        }
+
+        private void startActivity() {
+            Intent activityIntent = ContainerActivity.newIntent(mContext, mSong.getSongId());
+            mContext.startActivity(activityIntent);
         }
 
         private void bindSong(Song song) {
+            mSong = song;
             mArtistName.setText(song.getArtistName());
             mSongName.setText(song.getSongName());
             mSongImage.setImageBitmap(song.getSongImage());
             mDuration.setText(song.getDuration());
         }
-    }
-
-    public interface SendIntent {
-        void viewHolderClicked();
-    }
-
-    public interface Play {
-        void playSong();
     }
 }

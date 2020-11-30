@@ -16,12 +16,15 @@
             android:name=".service.MusicPlayerService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".service.MusicPlayerService"
+            android:enabled="true"
+            android:exported="true" />
 
-        <activity android:name=".controller.activity.ContainerActivity"></activity>
+        <activity android:name=".controller.activity.ContainerActivity" />
         <activity android:name=".controller.activity.MusicPagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

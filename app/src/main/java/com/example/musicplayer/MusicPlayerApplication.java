@@ -10,17 +10,21 @@ public class MusicPlayerApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         createNotificationChannel();
     }
 
     private void createNotificationChannel() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channelId = "music_player_channel_id";
-            CharSequence name = "music player chanel";
-            String description = "This is notification channel for music playe";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
-            channel.setDescription(description);
+
+            NotificationChannel channel = new NotificationChannel(
+                    getResources().getString(R.string.notification_channel_id),
+                    getResources().getString(R.string.notification_channel_title),
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            channel.setDescription(
+                    getResources().getString(R.string.notification_channel_description));
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
